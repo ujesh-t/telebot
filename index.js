@@ -8,6 +8,8 @@ telegram.on("text", (message) => {
      // clear.getEventById("oo4QIuKQQTYA", (codedayEvent) => {
      // var endsAt = moment(codedayEvent.ends_at * 1000);
      // telegram.sendMessage(message.chat.id, "CodeDay ends " + endsAt.fromNow() + "!");
-    });
+      
+    //});
+    telegram.sendMessage(message.chat.id, "I am here!");
   }
 });
