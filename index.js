@@ -72,3 +72,29 @@ telegram.onText(/\/(cryptopia|crypt) (.+) (.+)/, (message, match) => {
             }
         });
 });
+
+telegram.onText(/\/(bittrex|bitrx) (.+) (.+)/, (message, match) => {
+     bitrexUrl = "https://bittrex.com/api/v1.1/public/getticker?market="+match[2]+"-"+match[3];
+     console.log('Bittrex URL >>> '+bitrexUrl);
+     request({
+            method: 'GET'
+            , uri: bitrexUrl
+            , gzip: true
+        }, function (error, response, html) {
+            if (!error) {
+                var out = JSON.parse(html);
+                console.log(out);
+                if(out.message){
+                    telegram.sendMessage(message.chat.id, "I am not able to retrieve price : "+out.message+"!");
+                    return;
+                }
+                telegram.sendMessage(message.chat.id, match[2]+" - "+match[3]+"\n============== \nHighest Ask in Bittrex is *"+out.result.Ask+"* at the moment!\nLowest Bid is at *"+out.result.Bid+"*\nLast Price on "+out.result.Last,{
+                    parse_mode: "Markdown"
+                });
+            }
+            else {
+                telegram.sendMessage(message.chat.id, "I am not able to retrieve price at the moment!");
+                console.error(error);
+            }
+        });
+});
