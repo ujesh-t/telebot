@@ -5,6 +5,13 @@ var TelegramBot = require('node-telegram-bot-api')
     });
 var request = require('request');
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
+
+telegram.onText(/Thank.*Ammu/i, (message) => {
+    telegram.sendMessage(message.chat.id, "You are welcome "+message.from.first_name+".");
+});
+
+
 telegram.onText(/\/cex (.+) (.+)/, (message, match) => {
 
         cexUrl = "https://cex.io/api/ticker/"+match[1]+"/"+match[2];
