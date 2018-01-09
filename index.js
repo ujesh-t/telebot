@@ -105,3 +105,55 @@ telegram.onText(/\/(bittrex|bitrx) (.+) (.+)/, (message, match) => {
             }
         });
 });
+
+telegram.onText(/\/bittrex@MyAmmuBot/, (message, match) => {
+     bitrexUrl = "https://bittrex.com/api/v1.1/public/getticker?market=BTC-XMG";
+     console.log('Bittrex URL >>> '+bitrexUrl);
+     request({
+            method: 'GET'
+            , uri: bitrexUrl
+            , gzip: true
+        }, function (error, response, html) {
+            if (!error) {
+                var out = JSON.parse(html);
+                console.log(out);
+                if(out.message){
+                    telegram.sendMessage(message.chat.id, "I am not able to retrieve price : "+out.message+"!");
+                    return;
+                }
+                telegram.sendMessage(message.chat.id, "BTC - XMG\n============== \nHighest Ask in Bittrex is *"+out.result.Ask+"* at the moment!\nLowest Bid is at *"+out.result.Bid+"*\nLast Price on "+out.result.Last,{
+                    parse_mode: "Markdown"
+                });
+            }
+            else {
+                telegram.sendMessage(message.chat.id, "I am not able to retrieve price at the moment!");
+                console.error(error);
+            }
+        });
+});
+
+telegram.onText(/\/cryptopia@MyAmmuBot/, (message, match) => {
+     cryptUrl = "https://www.cryptopia.co.nz/api/GetMarket/XMG_BTC";
+     console.log('Cryptopia URL >>> '+cryptUrl);
+     request({
+            method: 'GET'
+            , uri: cryptUrl
+            , gzip: true
+        }, function (error, response, html) {
+            if (!error) {
+                var out = JSON.parse(html);
+                console.log(out);
+                if(out.Error){
+                    telegram.sendMessage(message.chat.id, "I am not able to retrieve price : "+out.Error+"!");
+                    return;
+                }
+                telegram.sendMessage(message.chat.id, "XMG - BTC\n============== \nHighest Ask in Cryptopia is *"+out.Data.AskPrice+"* at the moment!\nLowest Bid is at *"+out.Data.BidPrice+"*\nLast Price on "+out.Data.LastPrice,{
+                    parse_mode: "Markdown"
+                });
+            }
+            else {
+                telegram.sendMessage(message.chat.id, "I am not able to retrieve price at the moment!");
+                console.error(error);
+            }
+        });
+});
