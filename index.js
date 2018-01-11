@@ -157,3 +157,26 @@ telegram.onText(/\/cryptopia@MyAmmuBot/, (message, match) => {
             }
         });
 });
+
+telegram.onText(/\/coindelta (.+)/,(message, match) => {
+
+    coindeltaUrl = "https://coindelta.com/api/v1/public/getticker/";
+    var m = match[1].toLowerCase();
+    request({
+        method: 'GET',
+        uri: coindeltaUrl,
+        gzip: true
+    }, function(error, response, html){
+        if(!error){
+            var out = JSON.parse(html);
+            out.forEach(function(item){
+               if(item.MarketName == m+'-inr') {
+                    telegram.sendMessage(message.chat.id, m.toUpperCase()+" - INR\n============== \nHighest Ask in CoinDelta is *"+item.Ask+"* at the moment!\nLowest Bid is at *"+item.Bid+"*\nLast Price on "+item.Last,{
+                    parse_mode: "Markdown"
+                });
+                }
+            });
+        }
+    });
+    
+});
