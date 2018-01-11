@@ -158,7 +158,7 @@ telegram.onText(/\/cryptopia@MyAmmuBot/, (message, match) => {
         });
 });
 
-telegram.onText(/\/coindelta (.+)/,(message, match) => {
+telegram.onText(/cd (.+)/,(message, match) => {
 
     coindeltaUrl = "https://coindelta.com/api/v1/public/getticker/";
     var m = match[1].toLowerCase();
