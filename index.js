@@ -168,6 +168,7 @@ telegram.onText(/cd (.+)/,(message, match) => {
         gzip: true
     }, function(error, response, html){
         if(!error){
+            console.log(html);
             var out = JSON.parse(html);
             out.forEach(function(item){
                if(item.MarketName == m+'-inr') {
